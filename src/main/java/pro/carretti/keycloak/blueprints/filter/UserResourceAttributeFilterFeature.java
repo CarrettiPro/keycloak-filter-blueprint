@@ -5,24 +5,28 @@ import jakarta.ws.rs.container.ResourceInfo;
 import jakarta.ws.rs.core.FeatureContext;
 import jakarta.ws.rs.ext.Provider;
 import org.jboss.logging.Logger;
-import org.keycloak.protocol.oidc.endpoints.UserInfoEndpoint;
+
+import org.keycloak.services.resources.admin.UserResource;
 
 /**
- * A DynamicFeature that binds UserInfoCacheFilter to a particular endpoint (UserInfo), ignoring others.
+ * A DynamicFeature that binds UserResourceAttributeFilter to a particular endpoint (UserResource), ignoring others.
  *
  * @author <a href="mailto:demetrio@carretti.pro">Dmitry Telegin</a>
  */
 @Provider
-public class UserInfoCacheFilterFeature implements DynamicFeature {
+public class UserResourceAttributeFilterFeature implements DynamicFeature {
 
-    private static final Logger LOG = Logger.getLogger(UserInfoCacheFilterFeature.class);
+    private static final Logger LOG = Logger.getLogger(UserResourceAttributeFilterFeature.class);
 
     @Override
     public void configure(ResourceInfo resourceInfo, FeatureContext context) {
-        LOG.tracev("configure: {0}::{1}", resourceInfo.getResourceClass().getSimpleName(), resourceInfo.getResourceMethod().getName());
-        if (resourceInfo.getResourceClass().isAssignableFrom(UserInfoEndpoint.class)) {
-            LOG.debug("Registering UserInfoCacheFilter");
-            context.register(UserInfoCacheFilter.class, 1);
+        String className = resourceInfo.getResourceClass().getSimpleName();
+        String methodName = resourceInfo.getResourceMethod().getName();
+        LOG.tracev("configure: {0}::{1}", className, methodName);
+        if (resourceInfo.getResourceClass().isAssignableFrom(UserResource.class) &&
+                (methodName.equals("getUser") || methodName.equals("updateUser"))) {
+            LOG.debug("Registering UserResourceAttributeFilter");
+            context.register(UserResourceAttributeFilter.class, 1);
         }
     }
 
