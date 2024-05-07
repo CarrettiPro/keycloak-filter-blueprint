@@ -1,9 +1,9 @@
 package pro.carretti.keycloak.blueprints.filter;
 
-import jakarta.ws.rs.container.DynamicFeature;
-import jakarta.ws.rs.container.ResourceInfo;
-import jakarta.ws.rs.core.FeatureContext;
-import jakarta.ws.rs.ext.Provider;
+import javax.ws.rs.container.DynamicFeature;
+import javax.ws.rs.container.ResourceInfo;
+import javax.ws.rs.core.FeatureContext;
+import javax.ws.rs.ext.Provider;
 import org.jboss.logging.Logger;
 
 import org.keycloak.services.resources.admin.UserResource;
